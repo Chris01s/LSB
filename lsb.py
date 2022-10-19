@@ -56,7 +56,7 @@ class LSB:
                                 count=i,
                                 length=n
                         )
-                        bin_char = bin(ord(char)).replace('b','')
+                        bin_char = format(ord(char), "08b")
                         self.message_bin += bin_char
                 print("\n")
 
@@ -68,9 +68,11 @@ class LSB:
                         self.n = 4
                 self.total_pixels = self.img_array.size//self.n
 
+        def calculate_required_pixels(self):
+                self.required_pixels = len(self.message_bin)
 
         def check_pixel_requirements(self):
-                self.required_pixels = len(self.message_bin)
+                self.calculate_required_pixels()
                 if self.required_pixels > self.total_pixels:
                         raise FileSizeException
 
@@ -112,11 +114,6 @@ class LSB:
 
         def get_hidden_bits(self):
                 self.hidden_bits = ""
-                self.update_count(
-                        job="Finding hidden LSBs...",
-                        count= 0,
-                        length=self.total_pixels
-                )
                 for p in range(self.total_pixels):
                         self.update_count(
                                 job="Finding hidden LSBs...",
